@@ -26,7 +26,7 @@ class AddForeignKeyTypeId extends Migration
     {
         /** @var Illuminate\Database\Capsule\Manager $schema */
         $schema = $this->get('db');
-        $sql = 'alter table events DROP FOREIGN KEY events_ibfk_1';
+        $sql = 'alter table events drop foreign key events_ibfk_1';
 
         $schema::connection()->statement($sql);
     }
