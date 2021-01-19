@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     'db' => [
         'driver' => 'mysql',
+        'connection' => 'mysql',
         'username' => getenv('MYSQL_USER') ?: 'user',
         'password' => getenv('MYSQL_PASSWORD') ?: 'pass',
         'host' => getenv('MYSQL_HOST') ?: 'db',
