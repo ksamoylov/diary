@@ -1,0 +1,5 @@
+vendor
+.env_mysql
+.env_php
+.idea
+.DS_Store
