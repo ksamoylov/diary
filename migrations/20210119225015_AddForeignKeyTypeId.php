@@ -14,7 +14,7 @@ class AddForeignKeyTypeId extends Migration
     {
         /** @var Manager $schema */
         $schema = $this->get('db');
-        $sql = 'alter table events add foreign key (type) references event_types(id)';
+        $sql = 'alter table events add foreign key (type) references event_types(id) on delete cascade';
 
         $schema::connection()->statement($sql);
     }
