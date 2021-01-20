@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Helper;
+namespace App\Service;
 
 use JsonException;
 
-class RequestEventsHelper
+class RequestEventsService
 {
     /**
      * @todo доделать вместе с constraint
@@ -19,10 +19,10 @@ class RequestEventsHelper
 
     /**
      * @param string $requestBody
-     * @return mixed
+     * @return array
      * @throws JsonException
      */
-    public static function getParsedRequestBody(string $requestBody)
+    public static function getParsedRequestBody(string $requestBody): array
     {
         return json_decode($requestBody, true, 512, JSON_THROW_ON_ERROR);
     }

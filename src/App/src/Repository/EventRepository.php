@@ -6,8 +6,16 @@ namespace App\Repository;
 
 use App\Entity\EventEntity;
 
-class EventRepository
+class EventRepository extends AbstractRepository
 {
+    /**
+     * EventRepository constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(new EventEntity());
+    }
+
     public function create(array $eventData): void
     {
         $eventEntity = new EventEntity();

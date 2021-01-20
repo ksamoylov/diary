@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Collection\EventTypeCollection;
 use App\Entity\EventTypeEntity;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
-class EventTypeRepository
+class EventTypeRepository extends AbstractRepository
 {
+    /**
+     * EventTypeRepository constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(new EventTypeEntity());
+    }
+
     /**
      * @param array $eventTypeData
      */
@@ -25,17 +30,5 @@ class EventTypeRepository
         }
 
         $eventTypeEntity->save();
-    }
-
-    /**
-     * @todo сделать нормальный абстрактный репозиторий для сущности с учетом всех операторов
-     * @param array $criteria
-     * @return EventTypeCollection|Builder[]|Collection
-     */
-    public function findBy(array $criteria): EventTypeCollection
-    {
-        return EventTypeEntity::query()
-            ->where($criteria)
-            ->get();
     }
 }
