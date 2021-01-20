@@ -13,7 +13,7 @@ class AddEventTypes extends Migration
     /**
      * Do the migration
      */
-    public function up()
+    public function up(): void
     {
         /** @var Manager $schema */
         $schema = $this->get('db');
@@ -26,6 +26,9 @@ class AddEventTypes extends Migration
                         ->unsigned();
                     $table->string('name', 255);
                     $table->json('settings')->nullable();
+
+                    $table->timestamp('created_at')->useCurrent();
+                    $table->timestamp('updated_at')->useCurrent();
                 }
             );
     }
@@ -33,7 +36,7 @@ class AddEventTypes extends Migration
     /**
      * Undo the migration
      */
-    public function down()
+    public function down(): void
     {
         /** @var Illuminate\Database\Capsule\Manager $schema */
         $schema = $this->get('db');

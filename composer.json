@@ -35,7 +35,8 @@
         "mezzio/mezzio-fastroute": "^3.0.3",
         "mezzio/mezzio-helpers": "^5.3",
         "mezzio/mezzio-twigrenderer": "^2.6",
-        "symfony/event-dispatcher": "^5.2"
+        "symfony/event-dispatcher": "^5.2",
+        "ext-json": "*"
     },
     "require-dev": {
         "laminas/laminas-development-mode": "^3.2",

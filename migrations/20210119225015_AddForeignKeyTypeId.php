@@ -10,11 +10,11 @@ class AddForeignKeyTypeId extends Migration
     /**
      * Do the migration
      */
-    public function up()
+    public function up(): void
     {
         /** @var Manager $schema */
         $schema = $this->get('db');
-        $sql = 'alter table events add foreign key (type_id) references event_types(id)';
+        $sql = 'alter table events add foreign key (type) references event_types(id)';
 
         $schema::connection()->statement($sql);
     }
@@ -22,7 +22,7 @@ class AddForeignKeyTypeId extends Migration
     /**
      * Undo the migration
      */
-    public function down()
+    public function down(): void
     {
         /** @var Illuminate\Database\Capsule\Manager $schema */
         $schema = $this->get('db');

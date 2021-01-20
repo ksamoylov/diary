@@ -25,11 +25,11 @@ class AddEvents extends Migration
                     $table->bigIncrements('id')
                         ->unsigned();
                     $table->string('name', 255);
-                    $table->unsignedBigInteger('type_id');
+                    $table->unsignedBigInteger('type');
                     $table->timestamp('target_date');
                     $table->boolean('is_done')->default(false);
                     $table->mediumText('content')->nullable();
-                    $table->timestamp('checked_at')->nullable();
+                    $table->timestamp('next_check_at')->nullable();
 
                     $table->timestamp('created_at')->useCurrent();
                     $table->timestamp('updated_at')->useCurrent();
