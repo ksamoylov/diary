@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Api\V1\Events;
 
+use App\Constraint\EventsEditConstraintFactory;
 use App\Repository\EventRepository;
 use App\Service\EventsService;
+use App\Service\ValidatorTrait;
 use App\ValueObject\EventValueObject;
 use Fig\Http\Message\StatusCodeInterface;
 use JsonException;
@@ -16,6 +18,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class EventsEditHandler implements RequestHandlerInterface
 {
+    use ValidatorTrait;
+
     private EventsService $eventsService;
     private EventRepository $eventRepository;
 
@@ -38,25 +42,25 @@ class EventsEditHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $requestBody = (string)$request->getBody();
-        $parsedData = $this->eventsService->getParsedRequestBody($requestBody);
+        $parsedRequestBody = $this->eventsService->getParsedRequestBody($requestBody);
+        $violations = $this->validate(EventsEditConstraintFactory::build(), $parsedRequestBody);
 
-        $eventId = (int)($parsedData['id'] ?? null);
-
-        // @todo после добавления констрейнта убрать проверку
-        if (empty($eventId)) {
-            return new JsonResponse(['Error' => 'Bad request', StatusCodeInterface::STATUS_BAD_REQUEST]);
-        }
-
-        $eventEnity = $this->eventRepository->findOneBy(['id' => $eventId]);
-
-        if ($eventEnity === null) {
+        if (!empty($violations)) {
             return new JsonResponse(
-                ['Error' => sprintf('Event with id %d not found', $eventId),],
-                StatusCodeInterface::STATUS_NOT_FOUND
+                $this->createResponseMessageByViolations($violations),
+                StatusCodeInterface::STATUS_BAD_REQUEST
             );
         }
 
-        $eventValueObject = new EventValueObject($parsedData);
+        $eventValueObject = new EventValueObject($parsedRequestBody);
+        $eventEnity = $this->eventRepository->findOneBy(['id' => $eventValueObject->getId(),]);
+
+        if ($eventEnity === null) {
+            return new JsonResponse(
+                ['Error' => sprintf('Event with id %d not found', $eventValueObject->getId()),],
+                StatusCodeInterface::STATUS_NOT_FOUND
+            );
+        }
 
         $this->eventRepository->update($eventEnity, $eventValueObject->toArray());
 

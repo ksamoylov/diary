@@ -19,6 +19,7 @@
     },
     "require": {
         "php": "^7.4",
+        "ext-json": "*",
         "composer/package-versions-deprecated": "^1.10.99",
         "davedevelopment/phpmig": "^1.7",
         "doctrine/dbal": "^3.0",
@@ -36,7 +37,7 @@
         "mezzio/mezzio-helpers": "^5.3",
         "mezzio/mezzio-twigrenderer": "^2.6",
         "symfony/event-dispatcher": "^5.2",
-        "ext-json": "*"
+        "symfony/validator": "^5.2"
     },
     "require-dev": {
         "filp/whoops": "^2.7.1",

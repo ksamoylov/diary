@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Api\V1\Events;
 
+use App\Constraint\EventsAddConstraintFactory;
 use App\Repository\EventRepository;
 use App\Service\EventsService;
+use App\Service\ValidatorTrait;
 use App\ValueObject\EventValueObject;
+use Fig\Http\Message\StatusCodeInterface;
 use JsonException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -15,6 +18,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class EventsAddHandler implements RequestHandlerInterface
 {
+    use ValidatorTrait;
+
     private EventsService $eventsService;
     private EventRepository $eventRepository;
 
@@ -36,11 +41,18 @@ class EventsAddHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // @todo допилить валидацию
         $requestBody = (string)$request->getBody();
-        $parsedData = $this->eventsService->getParsedRequestBody($requestBody);
+        $parsedRequestBody = $this->eventsService->getParsedRequestBody($requestBody);
+        $violations = $this->validate(EventsAddConstraintFactory::build(), $parsedRequestBody);
 
-        $eventValueObject = new EventValueObject($parsedData);
+        if (!empty($violations)) {
+            return new JsonResponse(
+                $this->createResponseMessageByViolations($violations),
+                StatusCodeInterface::STATUS_BAD_REQUEST
+            );
+        }
+
+        $eventValueObject = new EventValueObject($parsedRequestBody);
 
         $eventEntity = $this->eventRepository->create($eventValueObject->toArray());
 
