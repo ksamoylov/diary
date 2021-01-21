@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Api\V1\Events;
 
-use App\Helper\RequestEventsService;
 use App\Repository\EventRepository;
 use App\Service\EventsService;
+use App\ValueObject\EventValueObject;
 use JsonException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -15,14 +15,17 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class EventsAddHandler implements RequestHandlerInterface
 {
+    private EventsService $eventsService;
     private EventRepository $eventRepository;
 
     /**
      * EventsAddHandler constructor.
+     * @param EventsService $eventsService
      * @param EventRepository $eventRepository
      */
-    public function __construct(EventRepository $eventRepository)
+    public function __construct(EventsService $eventsService, EventRepository $eventRepository)
     {
+        $this->eventsService = $eventsService;
         $this->eventRepository = $eventRepository;
     }
 
@@ -35,10 +38,14 @@ class EventsAddHandler implements RequestHandlerInterface
     {
         // @todo допилить валидацию
         $requestBody = (string)$request->getBody();
-        $parsedData = EventsService::getParsedRequestBody($requestBody);
+        $parsedData = $this->eventsService->getParsedRequestBody($requestBody);
 
-        $this->eventRepository->create($parsedData);
+        $eventValueObject = new EventValueObject($parsedData);
 
-        return new JsonResponse(['Success' => 'Event successfully added']);
+        $eventEntity = $this->eventRepository->create($eventValueObject->toArray());
+
+        return new JsonResponse(
+            ['Success' => sprintf('Event %s successfully added', $eventEntity->getName()),]
+        );
     }
 }

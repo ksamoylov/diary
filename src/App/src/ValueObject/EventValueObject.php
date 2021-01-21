@@ -4,27 +4,19 @@ declare(strict_types=1);
 
 namespace App\ValueObject;
 
+use App\Enum\EventPropertyMapInterface;
+
 class EventValueObject
 {
     use ValueObjectTrait;
 
-    private const PROPERTY_SETTINGS_MAP = [
-        'id' => 'setId',
-        'name' => 'setName',
-        'type' => 'setType',
-        'target_date' => 'setTargetDate',
-        'is_done' => 'setIsDone',
-        'content' => 'setContent',
-        'next_check_at' => 'setNextCheckAt',
-    ];
-
-    private ?int $id;
-    private ?string $name;
-    private ?int $type;
-    private ?string $targetDate;
-    private ?bool $isDone;
-    private ?string $content;
-    private ?string $nextCheckAt;
+    private ?int $id = null;
+    private ?string $name = null;
+    private ?int $type = null;
+    private ?string $targetDate = null;
+    private ?bool $isDone = null;
+    private ?string $content = null;
+    private ?string $nextCheckAt = null;
 
     /**
      * EventValueObject constructor.
@@ -32,7 +24,7 @@ class EventValueObject
      */
     public function __construct(array $data)
     {
-        $this->setProperties($data, self::PROPERTY_SETTINGS_MAP);
+        $this->setProperties($data, EventPropertyMapInterface::PROPERTY_SETTINGS_MAP);
     }
 
     /**

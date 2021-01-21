@@ -12,7 +12,7 @@ class EventsService
      * @todo доделать вместе с constraint
      * @param string $requestBody
      */
-    public static function validate(string $requestBody)
+    public function validate(string $requestBody)
     {
 
     }
@@ -22,7 +22,7 @@ class EventsService
      * @return array
      * @throws JsonException
      */
-    public static function getParsedRequestBody(string $requestBody): array
+    public function getParsedRequestBody(string $requestBody): array
     {
         return json_decode($requestBody, true, 512, JSON_THROW_ON_ERROR);
     }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\ValueObject;
 
+use App\Helper\CommonHelper;
+
 trait ValueObjectTrait
 {
     /**
@@ -19,5 +21,24 @@ trait ValueObjectTrait
 
             call_user_func([static::class, $map[$key],], $value);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $result = [];
+
+        foreach ($this as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+
+            $convertedKey = CommonHelper::convertFromCamelcaseToUnderscore($key);
+            $result[$convertedKey] = $value;
+        }
+
+        return $result;
     }
 }

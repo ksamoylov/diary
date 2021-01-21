@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\EventEntity;
+use App\Enum\EventPropertyMapInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class EventRepository extends AbstractRepository
 {
@@ -17,32 +19,37 @@ class EventRepository extends AbstractRepository
     }
 
     /**
-     * @param array $eventData
+     * @param array $properties
+     * @return Model|EventEntity
      */
-    public function create(array $eventData): void
+    public function create(array $properties): EventEntity
     {
-        $eventEntity = new EventEntity();
-
-        $eventEntity->setName($eventData['name']);
-        $eventEntity->setType($eventData['type']);
-        $eventEntity->setTargetDate($eventData['target_date']);
-
-        if (!empty($eventData['content'])) {
-            $eventEntity->setContent($eventData['content']);
-        }
-
-        if (!empty($eventData['next_check_at'])) {
-            $eventEntity->setNextCheckAt($eventData['next_check_at']);
-        }
+        $eventEntity = $this->setProperties(
+            new EventEntity(),
+            $properties,
+            EventPropertyMapInterface::PROPERTY_SETTINGS_MAP
+        );
 
         $eventEntity->save();
+
+        return $eventEntity;
     }
 
     /**
      * @param EventEntity $eventEntity
-     * @param array $values
+     * @param array $properties
+     * @return Model|EventEntity
      */
-    public function update(EventEntity $eventEntity, array $values): void
+    public function update(EventEntity $eventEntity, array $properties): EventEntity
     {
+        $eventEntityToUpdate = $this->setProperties(
+            $eventEntity,
+            $properties,
+            EventPropertyMapInterface::PROPERTY_SETTINGS_MAP
+        );
+
+        $eventEntityToUpdate->save();
+
+        return $eventEntityToUpdate;
     }
 }

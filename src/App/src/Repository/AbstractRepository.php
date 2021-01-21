@@ -11,8 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class AbstractRepository
 {
+    use ReposiotoryTrait;
+
     private Model $model;
 
+    /**
+     * AbstractRepository constructor.
+     * @param Model $model
+     */
     public function __construct(Model $model)
     {
         $this->model = $model;

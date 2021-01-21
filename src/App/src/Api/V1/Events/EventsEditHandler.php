@@ -16,15 +16,17 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class EventsEditHandler implements RequestHandlerInterface
 {
+    private EventsService $eventsService;
     private EventRepository $eventRepository;
 
     /**
      * EventsEditHandler constructor.
+     * @param EventsService $eventsService
      * @param EventRepository $eventRepository
      */
-    public function __construct(EventRepository $eventRepository)
+    public function __construct(EventsService $eventsService,EventRepository $eventRepository)
     {
-
+        $this->eventsService = $eventsService;
         $this->eventRepository = $eventRepository;
     }
 
@@ -36,16 +38,15 @@ class EventsEditHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $requestBody = (string)$request->getBody();
-
-        $parsedData = EventsService::getParsedRequestBody($requestBody);
+        $parsedData = $this->eventsService->getParsedRequestBody($requestBody);
 
         $eventId = (int)($parsedData['id'] ?? null);
 
+        // @todo после добавления констрейнта убрать проверку
         if (empty($eventId)) {
             return new JsonResponse(['Error' => 'Bad request', StatusCodeInterface::STATUS_BAD_REQUEST]);
         }
 
-        // @todo после добавления констрейнта убрать проверку выше
         $eventEnity = $this->eventRepository->findOneBy(['id' => $eventId]);
 
         if ($eventEnity === null) {
@@ -56,6 +57,8 @@ class EventsEditHandler implements RequestHandlerInterface
         }
 
         $eventValueObject = new EventValueObject($parsedData);
+
+        $this->eventRepository->update($eventEnity, $eventValueObject->toArray());
 
         return new JsonResponse(['Success' => sprintf('Event %s successfully updated', $eventEnity->getName()),]);
     }
