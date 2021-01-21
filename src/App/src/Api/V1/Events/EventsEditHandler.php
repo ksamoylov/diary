@@ -53,6 +53,7 @@ class EventsEditHandler implements RequestHandlerInterface
         }
 
         $eventValueObject = new EventValueObject($parsedRequestBody);
+
         $eventEnity = $this->eventRepository->findOneBy(['id' => $eventValueObject->getId(),]);
 
         if ($eventEnity === null) {
