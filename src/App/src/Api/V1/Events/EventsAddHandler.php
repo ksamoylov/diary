@@ -6,6 +6,7 @@ namespace App\Api\V1\Events;
 
 use App\Helper\RequestEventsService;
 use App\Repository\EventRepository;
+use App\Service\EventsService;
 use JsonException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -34,10 +35,10 @@ class EventsAddHandler implements RequestHandlerInterface
     {
         // @todo допилить валидацию
         $requestBody = (string)$request->getBody();
-        $parsedData = RequestEventsService::getParsedRequestBody($requestBody);
+        $parsedData = EventsService::getParsedRequestBody($requestBody);
 
         $this->eventRepository->create($parsedData);
 
-        return new JsonResponse(['status' => 'ok']);
+        return new JsonResponse(['Success' => 'Event successfully added']);
     }
 }

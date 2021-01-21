@@ -16,6 +16,9 @@ class EventRepository extends AbstractRepository
         parent::__construct(new EventEntity());
     }
 
+    /**
+     * @param array $eventData
+     */
     public function create(array $eventData): void
     {
         $eventEntity = new EventEntity();
@@ -33,5 +36,13 @@ class EventRepository extends AbstractRepository
         }
 
         $eventEntity->save();
+    }
+
+    /**
+     * @param EventEntity $eventEntity
+     * @param array $values
+     */
+    public function update(EventEntity $eventEntity, array $values): void
+    {
     }
 }

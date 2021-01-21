@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\EventEntity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class AbstractRepository
+abstract class AbstractRepository
 {
     private Model $model;
 
@@ -63,5 +64,25 @@ class AbstractRepository
         }
 
         return $collection;
+    }
+
+    /**
+     * @param array $criteria
+     * @param string|null $orderByColumn
+     * @param string|null $orderByDirection
+     * @return EventEntity|null
+     */
+    public function findOneBy(
+        array $criteria,
+        string $orderByColumn = null,
+        string $orderByDirection = null
+    ): ?EventEntity {
+        $builder = $this->createQueryBuilder()->where($criteria);
+        
+        if ($orderByColumn && $orderByDirection) {
+            $builder->orderBy($orderByColumn, $orderByDirection);
+        }
+
+        return $builder->get()->first();
     }
 }

@@ -6,7 +6,7 @@ namespace App\Service;
 
 use JsonException;
 
-class RequestEventsService
+class EventsService
 {
     /**
      * @todo доделать вместе с constraint
