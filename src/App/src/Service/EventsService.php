@@ -9,15 +9,6 @@ use JsonException;
 class EventsService
 {
     /**
-     * @todo доделать вместе с constraint
-     * @param string $requestBody
-     */
-    public function validate(string $requestBody)
-    {
-
-    }
-
-    /**
      * @param string $requestBody
      * @return array
      * @throws JsonException
