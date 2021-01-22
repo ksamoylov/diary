@@ -1,0 +1,3 @@
+[submodule "diary-frontend"]
+	path = frontend
+	url = https://github.com/ksamoylov/diary-frontend
