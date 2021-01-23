@@ -1,6 +1,6 @@
 FROM php:7.4.4-fpm-alpine3.11
 
-LABEL maintainer="ksamoylov@team.amocrm.com"
+LABEL maintainer="mebodik@gmail.com"
 
 ADD docker/php/php.ini /usr/local/etc/php
 
