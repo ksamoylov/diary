@@ -45,7 +45,7 @@ trait ValidatorTrait
         $responseMessage = [];
 
         foreach ($violations as $violation) {
-            if (!isset($violation['field']) && !isset($violation['message'])) {
+            if (!isset($violation['field'], $violation['message'])) {
                 continue;
             }
 
